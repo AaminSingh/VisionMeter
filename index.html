@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vision Screening Test</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom right, #6db3f2, #1e69de);
+      font-family: Poppins, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      width: 420px;
+      padding: 35px;
+      text-align: center;
+      border-radius: 16px;
+      box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 26px;
+      font-weight: 600;
+      color: #1e4aa8;
+    }
+
+    #instruction {
+      background: #eef4ff;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      border-left: 4px solid #1e4aa8;
+    }
+
+    #letter {
+      font-weight: bold;
+      margin: 30px 0;
+    }
+
+    #input {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      outline: none;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    #input:focus {
+      border-color: #1e4aa8;
+      box-shadow: 0px 0px 8px rgba(30,74,168,0.4);
+    }
+
+    #startBtn {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      background: #1e4aa8;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #startBtn:hover {
+      background: #153b82;
+    }
+
+    .correct-anim {
+      animation: pop 0.35s ease;
+    }
+    @keyframes pop {
+      50% { transform: scale(1.35); color: #0a8a25; }
+    }
+
+    .wrong-anim {
+      animation: shake 0.35s ease;
+      color: #c23030 !important;
+    }
+    @keyframes shake {
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Vision Screening Test</h1>
+
+    <p id="instruction">Cover your <b>LEFT eye</b> to test your RIGHT eye first.</p>
+
+    <button id="startBtn">Start Test</button>
+
+    <div id="letter" style="display:none;">E</div>
+   <input type="text" id="input" placeholder="Type the letter & press Enter" style="display:none;">
+   <button id="downloadBtn" style="display:none; margin-top:15px;">Download PDF Report</button>
+
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
