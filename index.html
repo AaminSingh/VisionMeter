@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VisionMeter</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom right, #8be7e0, #0a9ea1);
+      font-family: Poppins, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    .screen {
+      display: none;
+      text-align: center;
+      background: white;
+      width: 450px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+    }
+
+    #logo {
+      width: 150px;
+      margin-bottom: 12px;
+    }
+
+    /* ✅ Stylish tagline */
+    .fancy-tagline {
+      font-size: 17px;
+      font-weight: 600;
+      background: linear-gradient(to right, #0077b6, #00b4d8, #48cae4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.4px;
+      text-shadow: 0px 0px 8px rgba(72, 202, 228, 0.4);
+      margin-top: 6px;
+    }
+
+    button {
+      padding: 12px 22px;
+      border: none;
+      background: #0aa6a8;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 18px;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    button:hover { background: #087f81; }
+
+    .guidelines-list {
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    #letter { margin: 30px 0; font-weight: bold; }
+    #input { padding: 10px; border-radius: 6px; width: 60%; text-align:center; }
+
+    /* ✅ Correct animation */
+    .correct-anim { animation: pop .35s; }
+    @keyframes pop { 50% { transform: scale(1.35); color: #0a8a25; } }
+
+    /* ✅ Wrong animation */
+    .wrong-anim { animation: shake .35s; color: #c23030 !important; }
+    @keyframes shake {
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    /* ✅ New button row layout */
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 15px;
+    }
+    #startBtn, #voiceBtn {
+      width: 48%;
+      border-radius: 10px;
+    }
+
+    /* ✅ Gradient Download Button */
+    #downloadBtn {
+      display: none;
+      margin-top: 18px;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      background: linear-gradient(to right, #0077b6, #00b4d8);
+      color: white;
+      box-shadow: 0px 4px 12px rgba(0, 180, 216, 0.4);
+      transition: 0.3s ease;
+    }
+    #downloadBtn:hover {
+      background: linear-gradient(to right, #005f8c, #009bb5);
+      box-shadow: 0px 6px 18px rgba(0, 180, 216, 0.6);
+      transform: translateY(-2px);
+    }
+    #downloadBtn:active { transform: scale(0.97); }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ Screen 1: Welcome -->
+  <div class="screen" id="welcomeScreen" style="display:block;">
+    <img id="logo" src="visionmeter_logo.png">
+    <h2>Welcome to VisionMeter</h2>
+    <p class="fancy-tagline">Your friendly eye clarity screening tool</p>
+    <button onclick="showGuidelines()">Next</button>
+  </div>
+
+  <!-- ✅ Screen 2: Guidelines -->
+  <div class="screen" id="guidelineScreen">
+    <h2>Before You Start 👁️✨</h2>
+    <div class="guidelines-list">
+      • Stand <b>2 meters (6 feet)</b> away from the screen.<br>
+      • Ensure room lighting is balanced.<br>
+      • Adjust screen brightness for comfort.<br>
+      • Blink often to avoid dryness.<br>
+      • Follow 20-20-20 rule.<br>
+      • Sit relaxed with straight posture.<br>
+      • Eat Vitamin A-rich foods like Carrot & Spinach.<br>
+    </div>
+    <button onclick="startTest()">Start Vision Test</button>
+  </div>
+
+  <!-- ✅ Screen 3: Vision Test -->
+  <div class="screen" id="testScreen">
+    <h1>Vision Test</h1>
+    <p id="instruction">Cover your <b>LEFT</b> eye to test your <b>RIGHT</b> eye.</p>
+
+    <div class="button-row">
+      <button id="startBtn">Start Test</button>
+      <button id="voiceBtn">🎤 Speak Letter</button>
+    </div>
+
+    <div id="letter" style="display:none;">E</div>
+
+    <input type="text" id="input" placeholder="Type the letter & press Enter" style="display:none;">
+
+    <button id="downloadBtn">Download PDF Report</button>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
