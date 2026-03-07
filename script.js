@@ -1,6 +1,7 @@
 navigator.mediaDevices.getUserMedia({ audio: true }).catch(() => {});
 
 // ----- Screen References -----
+
 const welcomeScreen=document.getElementById("welcomeScreen");
 const modeScreen=document.getElementById("modeScreen");
 const guidelineScreen=document.getElementById("guidelineScreen");
