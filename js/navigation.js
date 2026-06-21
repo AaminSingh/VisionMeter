@@ -6,9 +6,10 @@
 
 const Nav = (() => {
   const screenIds = [
-    "welcomeScreen", "modeScreen", "calibrationScreen", "guidelineScreen",
+    "loginScreen", "welcomeScreen", "modeScreen", "calibrationScreen", "guidelineScreen",
     "testScreen", "colorTestScreen", "extraTestsScreen", "astigmatismScreen",
-    "contrastScreen", "visualFieldScreen", "extraSummaryScreen", "historyScreen"
+    "contrastScreen", "visualFieldScreen", "extraSummaryScreen", "historyScreen",
+    "tipsScreen", "tipsFoodScreen", "tipsHabitsScreen"
   ];
 
   function hideAll() {
@@ -27,6 +28,7 @@ const Nav = (() => {
       // restart the entrance animation
       requestAnimationFrame(() => el.classList.add("fade-in"));
     }
+    if (window.closeMobileSidebar) window.closeMobileSidebar();
   }
 
   function goToModeSelect() { show("modeScreen"); }
@@ -43,6 +45,7 @@ const Nav = (() => {
   function showGuidelines() { show("guidelineScreen"); }
   function showColorTest() { show("colorTestScreen"); }
   function showExtraTests() { show("extraTestsScreen"); }
+  function showTips() { show("tipsScreen"); }
   function showHistory() {
     show("historyScreen");
     if (window.History && window.History.renderList) window.History.renderList();
@@ -50,7 +53,7 @@ const Nav = (() => {
 
   return {
     show, hideAll, goToModeSelect, goToVisionEntry,
-    showGuidelines, showColorTest, showExtraTests, showHistory
+    showGuidelines, showColorTest, showExtraTests, showTips, showHistory
   };
 })();
 
@@ -62,4 +65,5 @@ function goToModeSelect() { Nav.goToModeSelect(); }
 function showGuidelines() { Nav.goToVisionEntry(); }
 function showColorTest() { Nav.showColorTest(); }
 function showExtraTests() { Nav.showExtraTests(); }
+function showTips() { Nav.showTips(); }
 function showHistory() { Nav.showHistory(); }

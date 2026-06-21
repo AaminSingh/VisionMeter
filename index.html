@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>VisionMeter Clinics</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -11,6 +11,9 @@
 <div class="disclaimer-banner">
   ⚠ Screening aid only — <b>not a substitute for a clinical eye exam.</b> Consult an eye care professional for diagnosis.
 </div>
+
+<button id="mobileMenuBtn" aria-label="Open menu">☰</button>
+<div id="sidebarBackdrop"></div>
 
 <div class="dashboard-container">
 
@@ -24,11 +27,14 @@
       </div>
     </div>
 
+    <div id="userBadge" class="user-badge"></div>
+
     <div class="nav-menu">
       <div class="nav-item" onclick="goToModeSelect()"><span>🏠</span> Dashboard</div>
       <div class="nav-item" onclick="showGuidelines()"><span>👁️</span> Vision Test</div>
       <div class="nav-item" onclick="showColorTest()"><span>🎨</span> Color Test</div>
       <div class="nav-item" onclick="showExtraTests()"><span>🩺</span> More Tests</div>
+      <div class="nav-item" onclick="showTips()"><span>🌿</span> Eye Health Tips</div>
       <div class="nav-item" onclick="showHistory()"><span>📈</span> History</div>
     </div>
 
@@ -41,11 +47,32 @@
   <!-- Main Content -->
   <main class="main-content">
 
+    <!-- Login / recognize returning user -->
+    <div class="screen fade-in" id="loginScreen" style="display:block;">
+      <div class="reticle"><div class="pupil"></div></div>
+      <h2>Welcome</h2>
+      <p class="fancy-tagline">
+        Sign in with your name and email so your test history is saved under your
+        own name on this device, or continue as a guest.
+      </p>
+      <p class="cal-helper" style="margin-bottom:18px;">
+        This is local identification only, not secure cloud authentication — no
+        password is checked. It just lets this browser recognize you next time.
+      </p>
+      <form id="loginForm">
+        <input type="text" id="loginName" placeholder="Your name" autocomplete="name">
+        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required>
+        <button type="submit" class="primary-btn" style="width:100%; margin-top:8px;">Sign In / Continue</button>
+      </form>
+      <button id="guestBtn" class="back-btn" style="width:100%;">Continue as Guest</button>
+      <div id="loginStatus" style="min-height:18px; font-size:13px; margin-top:10px;"></div>
+    </div>
+
     <!-- Welcome -->
-    <div class="screen fade-in" id="welcomeScreen" style="display:block;">
+    <div class="screen fade-in" id="welcomeScreen">
       <div class="reticle"><div class="pupil"></div></div>
       <h2>Welcome to VisionMeter</h2>
-      <p class="fancy-tagline">A calibrated, self-administered clarity screening console.</p>
+      <p class="fancy-tagline" id="welcomeGreeting">A calibrated, self-administered clarity screening console.</p>
       <button class="primary-btn" onclick="goToModeSelect()" style="width:100%; font-size:17px;">Begin Assessment</button>
     </div>
 
@@ -59,6 +86,7 @@
       </div>
       <div class="divider">Advanced Clinical Options</div>
       <button style="width:100%;" onclick="showExtraTests()">🔍 Specialty Tests</button>
+      <button style="width:100%; margin-top:10px;" onclick="showTips()">🌿 Eye Health Tips</button>
       <button id="recalibrateBtn" style="width:100%; margin-top:10px; background:transparent; border:1px solid var(--line); color: var(--text-dim);">🎯 Recalibrate Screen</button>
     </div>
 
@@ -184,12 +212,39 @@
       <button class="back-btn" style="width:100%; margin-top:26px;" onclick="showExtraTests()">⬅ Back to Specialty Tests</button>
     </div>
 
+    <!-- Eye Health Tips Menu -->
+    <div class="screen fade-in" id="tipsScreen" style="display:none;">
+      <h2>Eye Health Tips 🌿</h2>
+      <p class="fancy-tagline">Two quick guides — pick one</p>
+
+      <div class="test-card" onclick="showFoodTips()"><span>🥗</span> Eye-Healthy Food Routine</div>
+      <div class="test-card" onclick="showHabitTips()"><span>🛡️</span> Daily Habits & Screen Care</div>
+
+      <button class="back-btn" style="width:100%; margin-top:22px;" onclick="goToModeSelect()">⬅ Back to Dashboard</button>
+    </div>
+
+    <!-- Food Tips -->
+    <div class="screen fade-in" id="tipsFoodScreen" style="display:none;">
+      <h2>Eye-Healthy Food Routine 🥗</h2>
+      <p class="fancy-tagline">Nutrients commonly associated with eye health</p>
+      <div id="foodTipsList" class="tip-list"></div>
+      <button class="back-btn" style="width:100%; margin-top:20px;" onclick="showTips()">⬅ Back to Eye Health Tips</button>
+    </div>
+
+    <!-- Habit Tips -->
+    <div class="screen fade-in" id="tipsHabitsScreen" style="display:none;">
+      <h2>Daily Habits & Screen Care 🛡️</h2>
+      <p class="fancy-tagline">Simple routines to reduce eye strain day to day</p>
+      <div id="habitTipsList" class="tip-list"></div>
+      <button class="back-btn" style="width:100%; margin-top:20px;" onclick="showTips()">⬅ Back to Eye Health Tips</button>
+    </div>
+
     <!-- History -->
     <div class="screen fade-in" id="historyScreen" style="display:none;">
       <h2>Session History 📈</h2>
-      <p class="fancy-tagline">Saved locally on this device via IndexedDB.</p>
+      <p class="fancy-tagline">Saved locally on this device via IndexedDB, scoped to your signed-in profile.</p>
       <div id="historyList"></div>
-      <button class="back-btn" style="width:100%; margin-top:20px;" onclick="History.clearAll()">🗑️ Clear History</button>
+      <button class="back-btn" style="width:100%; margin-top:20px;" onclick="History.clearAll()">🗑️ Clear My History</button>
       <button class="back-btn" style="width:100%; margin-top:10px;" onclick="goToModeSelect()">⬅ Back to Dashboard</button>
     </div>
 
@@ -201,10 +256,12 @@
 <script src="js/state.js"></script>
 <script src="js/navigation.js"></script>
 <script src="js/history.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/calibration.js"></script>
 <script src="js/acuityTest.js"></script>
 <script src="js/colorTest.js"></script>
 <script src="js/specialtyTests.js"></script>
+<script src="js/eyeTips.js"></script>
 <script src="js/speech.js"></script>
 <script src="js/report.js"></script>
 <script src="js/main.js"></script>

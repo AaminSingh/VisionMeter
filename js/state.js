@@ -6,6 +6,10 @@
  */
 
 const AppState = {
+  // Who's using the app right now. Identification only (see auth.js) — not
+  // a secure authentication system, since this app has no backend/server.
+  currentUser: null, // { email, name } | null
+
   calibration: {
     isCalibrated: false,
     pxPerMM: null,        // physical pixels per millimetre on this screen

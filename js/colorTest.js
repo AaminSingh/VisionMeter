@@ -50,20 +50,39 @@ const ColorTest = (() => {
   }
 
   function finish() {
-    let label;
-    if (score >= 7 && wrong <= 2) label = "Normal Color Vision ✅";
-    else if (score >= 4) label = "Mild Color Sensitivity 🟡";
-    else label = "Possible Color Vision Deficiency ⚠️";
+    let label, emoji;
+    if (score >= 7 && wrong <= 2) { label = "Normal Color Vision"; emoji = "✅"; }
+    else if (score >= 4) { label = "Mild Color Sensitivity"; emoji = "🟡"; }
+    else { label = "Possible Color Vision Deficiency"; emoji = "⚠️"; }
 
-    AppState.results.color = { label, correct: score, incorrect: wrong };
+    AppState.results.color = { label: `${label} ${emoji}`, correct: score, incorrect: wrong };
+
+    // The bubble rounds leave an inline grid-template-columns on this
+    // container (e.g. repeat(6,55px)) — without clearing it, the result
+    // card below gets squeezed into that one narrow column.
+    colorGrid.style.gridTemplateColumns = "none";
+    colorGrid.style.display = "block";
 
     colorGrid.innerHTML = `
-      <p class="handwriting">${label}</p>
-      <p class="handwriting">Correct: ${score} | Incorrect: ${wrong}</p>
-      <p style="font-size:13px; color:var(--text-dim);">
-        A subtle red-green shift was used here. This is a screening cue, not a diagnosis —
-        a clinical color vision test (e.g. Ishihara plates) is needed to confirm any deficiency.
-      </p>`;
+      <div class="color-result-card">
+        <div class="color-result-emoji">${emoji}</div>
+        <div class="color-result-label">${label}</div>
+        <div class="color-result-stats">
+          <div class="color-stat">
+            <span class="color-stat-num">${score}</span>
+            <span class="color-stat-tag">Correct</span>
+          </div>
+          <div class="color-stat">
+            <span class="color-stat-num">${wrong}</span>
+            <span class="color-stat-tag">Incorrect</span>
+          </div>
+        </div>
+        <p class="color-result-note">
+          A subtle red-green shift was used here. This is a screening cue, not a
+          diagnosis — a clinical color vision test (e.g. Ishihara plates) is
+          needed to confirm any deficiency.
+        </p>
+      </div>`;
     if (window.History) window.History.saveSession();
   }
 

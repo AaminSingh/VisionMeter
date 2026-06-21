@@ -31,7 +31,9 @@ const History = (() => {
       AppState.stamp();
       const db = await openDB();
       const tx = db.transaction(STORE, "readwrite");
-      tx.objectStore(STORE).add(JSON.parse(JSON.stringify(AppState.results)));
+      const record = JSON.parse(JSON.stringify(AppState.results));
+      record.email = AppState.currentUser?.email || "guest";
+      tx.objectStore(STORE).add(record);
     } catch (err) {
       console.warn("VisionMeter: could not save history", err);
     }
@@ -48,17 +50,33 @@ const History = (() => {
     });
   }
 
+  // Only this device's IndexedDB quota limits storage (typically hundreds of
+  // MB+), so there's effectively no practical cap on how many sessions get
+  // kept — no pruning or row limit is applied here.
+  async function getSessionsForCurrentUser() {
+    const email = AppState.currentUser?.email || "guest";
+    const all = await getAllSessions();
+    return all.filter(s => (s.email || "guest") === email);
+  }
+
   async function clearAll() {
+    const email = AppState.currentUser?.email || "guest";
     const db = await openDB();
     const tx = db.transaction(STORE, "readwrite");
-    tx.objectStore(STORE).clear();
-    renderList();
+    const store = tx.objectStore(STORE);
+    const req = store.openCursor();
+    req.onsuccess = () => {
+      const cursor = req.result;
+      if (!cursor) { renderList(); return; }
+      if ((cursor.value.email || "guest") === email) cursor.delete();
+      cursor.continue();
+    };
   }
 
   async function renderList() {
     const listEl = document.getElementById("historyList");
     if (!listEl) return;
-    const sessions = await getAllSessions();
+    const sessions = await getSessionsForCurrentUser();
     if (!sessions.length) {
       listEl.innerHTML = `<p class="handwriting">No saved sessions yet — complete a test to start tracking.</p>`;
       return;
@@ -81,7 +99,7 @@ const History = (() => {
     }).join("");
   }
 
-  return { saveSession, getAllSessions, clearAll, renderList };
+  return { saveSession, getAllSessions, getSessionsForCurrentUser, clearAll, renderList };
 })();
 
 window.History = History;

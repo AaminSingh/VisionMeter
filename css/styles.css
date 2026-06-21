@@ -331,12 +331,155 @@ input[type="number"]:focus, input[type="text"]:focus { border-color: var(--accen
 .divider::before { margin-right: .5em; }
 .divider::after { margin-left: .5em; }
 
+/* ---------- Login screen ---------- */
+input[type="email"] {
+  width: 70%;
+  padding: 13px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-panel);
+  font-size: 15px; font-weight: 500; text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  margin: 10px auto; outline: none; display: block;
+}
+input[type="email"]:focus { border-color: var(--accent-cyan); }
+
+/* ---------- User badge (sidebar) ---------- */
+.user-badge {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: -10px 0 22px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.user-badge a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+.user-badge a:hover { text-decoration: underline; }
+
+/* ---------- Color test result (fixes the squeezed/messy layout) ---------- */
+.color-result-card {
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px 22px;
+  text-align: center;
+}
+.color-result-emoji { font-size: 34px; margin-bottom: 6px; }
+.color-result-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px; font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+.color-result-stats { display: flex; justify-content: center; gap: 28px; margin-bottom: 18px; }
+.color-stat { display: flex; flex-direction: column; align-items: center; }
+.color-stat-num { font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 600; color: var(--accent-cyan); }
+.color-stat-tag { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.color-result-note {
+  font-size: 13px; line-height: 1.6; color: var(--text-dim);
+  text-align: left; margin: 0; padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Eye health tip lists ---------- */
+.tip-list { text-align: left; margin-top: 22px; }
+.tip-row {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+}
+.tip-emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.tip-title { font-weight: 600; font-size: 15px; color: var(--text-primary); margin-bottom: 4px; }
+.tip-body { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+/* ---------- Mobile menu button + drawer backdrop ---------- */
+#mobileMenuBtn {
+  display: none;
+  position: fixed;
+  top: 38px; left: 12px;
+  z-index: 110;
+  width: 40px; height: 40px;
+  padding: 0;
+  border-radius: 8px;
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--line);
+  color: var(--accent-cyan);
+  font-size: 18px;
+}
+#sidebarBackdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 19;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+#sidebarBackdrop.visible { opacity: 1; pointer-events: auto; }
+
+/* =====================================================================
+   Mobile layout — instead of hiding navigation entirely (which is how
+   the previous version avoided overflow chaos), the sidebar becomes a
+   slide-in drawer triggered by the hamburger button, so every section
+   (including the new Eye Health Tips / History / Account) stays reachable.
+   ===================================================================== */
 @media (max-width: 800px) {
-  .dashboard-container { flex-direction: column; overflow-y: auto; height: auto; min-height: 100vh; padding-top: 50px; }
-  .sidebar { width: 100%; height: auto; padding: 16px; border-right: none; border-bottom: 1px solid var(--line); }
-  .sidebar-header { margin-bottom: 0; justify-content: center; }
-  .facts-container, .nav-menu { display: none; }
-  .main-content { padding: 18px; align-items: flex-start; }
-  .screen { padding: 28px 20px; }
+  body { overflow-x: hidden; }
+  .disclaimer-banner { font-size: 10.5px; padding: 6px 44px; line-height: 1.4; }
+  #mobileMenuBtn { display: flex; align-items: center; justify-content: center; }
+  #sidebarBackdrop { display: block; }
+
+  .dashboard-container {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+    padding-top: 60px;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 78vw;
+    max-width: 300px;
+    height: 100vh;
+    padding: 70px 22px 24px;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 20;
+    overflow-y: auto;
+  }
+  .sidebar.open { transform: translateX(0); box-shadow: 8px 0 30px rgba(0,0,0,0.5); }
+
+  .sidebar-header { justify-content: flex-start; }
+  .facts-container, .nav-menu { display: flex; } /* reachable again, inside the drawer */
+  .nav-menu { flex-direction: column; }
+
+  .main-content { padding: 16px; align-items: flex-start; }
+  .screen { padding: 26px 18px; max-width: 100%; }
   .button-row { flex-direction: column; }
+  .button-row button { min-width: 0; }
+
+  input[type="number"], input[type="text"], input[type="email"] { width: 92%; }
+  input[type="range"] { width: 100%; }
+
+  .reticle { width: 76px; height: 76px; }
+  #vfArea { width: 90vw; max-width: 280px; height: 90vw; max-height: 280px; }
+
+  .color-result-stats { gap: 18px; }
+}
+
+@media (max-width: 420px) {
+  h2 { font-size: 21px; }
+  .fancy-tagline, .handwriting { font-size: 14px; }
+  .screen { padding: 22px 14px; }
 }
